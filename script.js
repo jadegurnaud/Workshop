@@ -157,8 +157,8 @@ app.post('/download', async (req, res) => {
                 const filePath = path.join(downloadDir, fileIdWithExtension);
                 await downloadFile(file.id, filePath);
             }
-            createVideo();
         }));
+        createVideo();
 
         res.json({ downloadedFiles });
     } catch (err) {
