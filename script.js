@@ -5,6 +5,9 @@ import path from 'path'
 import bodyParser from 'body-parser'
 import cors from 'cors'
 import { createVideo } from './createVideo.js'
+import { config } from 'dotenv'
+
+config()
 
 const app = express();
 const port = 3000;
@@ -107,21 +110,9 @@ async function listFilesInFolder(folderId) {
     }
 }
 
-async function fetchFilesMiddleware(req, res, next) {
-    try {
-        const folderId = '15F5cAG9FG0R9GxHJwIEh6Sk0OWMCtLLP';
-        req.filesIdDrive = await listFilesInFolder(folderId);
-        next();
-    } catch (err) {
-        console.error(err);
-        res.status(500).json({ error: err.message });
-    }
-}
-
-
 app.get('/folders', async (req, res) => {
     try {
-        const folderId = '15F5cAG9FG0R9GxHJwIEh6Sk0OWMCtLLP';
+        const folderId = process.env.FOLDER_ID;
         const folders = await listFoldersInFolder(folderId);
         res.json(folders);
     } catch (err) {
@@ -165,9 +156,8 @@ app.post('/download', async (req, res) => {
                 const fileIdWithExtension = `${file.id}${fileExtension}`;
                 const filePath = path.join(downloadDir, fileIdWithExtension);
                 await downloadFile(file.id, filePath);
-                createVideo();
-                return filePath;
             }
+            createVideo();
         }));
 
         res.json({ downloadedFiles });
