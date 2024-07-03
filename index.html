@@ -302,15 +302,21 @@
                 });
                 
                 const extension = file.name.split('.').pop();
-                listItem.onclick = () => showModal(file, extension === 'mp4' ? 'video' : 'image');
-                if (extension === 'mp4') {
+                let type = '';
+                if ( extension === 'mp4' || extension === 'webm' || extension === 'ogg' || extension === 'mov') {
+                    type = 'video';
+                } else if (extension === 'jpg' || extension === 'jpeg' || extension === 'png') {
+                    type = 'image';
+                }
+                listItem.onclick = () => showModal(file, type);
+                if (extension === 'mp4' || extension === 'webm' || extension === 'ogg' || extension === 'mov') {
                     const video = document.createElement('video');
                     const source = document.createElement('source');
                     source.src = `https://drive.google.com/file/d/${file.id}/preview`;
                     video.appendChild(source);
                     video.controls = true;
                     listItem.appendChild(video);
-                } else {
+                } else if (extension === 'jpg' || extension === 'jpeg' || extension === 'png') {
                     const img = document.createElement('img');
                     img.src = `https://lh3.google.com/u/0/d/${file.id}`;
                     img.alt = file.name;
