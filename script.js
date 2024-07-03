@@ -1,10 +1,10 @@
-const express = require('express');
-const { google } = require('googleapis');
-const fs = require('fs');
-const path = require('path');
-const os = require('os');
-const bodyParser = require('body-parser');
-const cors = require('cors');
+import express from 'express'
+import { google } from 'googleapis'
+import fs from 'fs'
+import path from 'path'
+import bodyParser from 'body-parser'
+import cors from 'cors'
+import { createVideo } from './createVideo.js'
 
 const app = express();
 const port = 3000;
@@ -12,7 +12,7 @@ const port = 3000;
 app.use(cors());
 app.use(bodyParser.json());
 
-const credentialsPath = path.join(__dirname, 'credentials.json');
+const credentialsPath = path.join('./credentials.json');
 
 // Configure Google OAuth2 authentication
 const auth = new google.auth.GoogleAuth({
@@ -147,7 +147,7 @@ app.get('/files', async (req, res) => {
 app.post('/download', async (req, res) => {
     try {
         const { fileIds } = req.body;
-        const downloadDir = path.join(__dirname, 'downloaded_files');
+        const downloadDir = path.join('./downloaded_files');
         if (!fs.existsSync(downloadDir)) {
             fs.mkdirSync(downloadDir);
         }
@@ -165,6 +165,7 @@ app.post('/download', async (req, res) => {
                 const fileIdWithExtension = `${file.id}${fileExtension}`;
                 const filePath = path.join(downloadDir, fileIdWithExtension);
                 await downloadFile(file.id, filePath);
+                createVideo();
                 return filePath;
             }
         }));
