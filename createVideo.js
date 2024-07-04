@@ -29,6 +29,9 @@ export async function createVideo() {
             throw new Error('No valid clips to process.');
         }
 
+        console.log('get Images')
+        console.log(JSON.stringify(imageList))
+
         await Editly({
             width: 1920,
             height: 1080,
