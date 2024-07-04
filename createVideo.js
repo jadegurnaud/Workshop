@@ -47,7 +47,9 @@ export async function createVideo() {
         });
 
         console.log('Video created successfully!');
+        return true;
     } catch (error) {
         console.error('Error creating video:', error);
+        return false;
     }
 }
