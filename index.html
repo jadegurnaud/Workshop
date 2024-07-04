@@ -23,7 +23,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.3);
+            background: rgba(0, 0, 0, 0.4);
             display: none;
             z-index: 900;
         }
@@ -41,7 +41,9 @@
             display: none;
             margin-left: auto;
         }
-
+        #btn-telecharger-video {
+            display: none;
+        }
         .btn-container {
             display: flex;
             justify-content: center;
@@ -71,6 +73,10 @@
 
         #folders li {
             padding: 0 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
         }
 
         #photos {
@@ -82,10 +88,9 @@
         }
 
         .folder {
-            width: 50px;
-            height: 35px;
+            width: 60px;
+            height: 42px;
             display: inline-block;
-            margin: 10 0;
             position: relative;
             background-color: #708090;
             border-radius: 0 3px 3px 3px;
@@ -94,12 +99,12 @@
 
         .folder:before {
             content: '';
-            width: 60%;
-            height: 0.3em;
+            width: 63%;
+            height: 0.4em;
             border-radius: 0 20px 0 0;
             background-color: #708090;
             position: absolute;
-            top: -0.3em;
+            top: -0.4em;
             left: 0px;
         }
 
@@ -148,6 +153,16 @@
             left: 50%;
             display: none;
             z-index: 1000;
+        }
+        .text-montage {
+            display: none;
+            position: fixed;
+            top: calc(50% + 50px);
+            left: calc(50% - 70px);
+            z-index: 1000;
+        }
+        a {
+            text-decoration: none;
         }
 
         @keyframes rotation {
@@ -243,11 +258,12 @@
                 <button onclick="deselectAll()">Tout désélectionner</button>
             </div>
             <button id="btn-montage" onclick="downloadFiles()">Créer le montage vidéo</button>
-            <a href="./output.mp4" download="./output.mp4">
-                <button id="btn-montage">Télécharger la vidéo</button>
+            <a href="./outputs/output.mp4" download="./outputs/output.mp4">
+                <button id="btn-telecharger-video">Télécharger la vidéo</button>
             </a>
         </div>
         <span class="loader"></span>
+        <p class="text-montage">Création du montage en cours...</p>
         <ul id="photos"></ul>
     </div>
 
@@ -288,6 +304,7 @@
                     span.textContent = folder.name;
                     span.style.display = 'block';
                     span.style.textAlign = 'center';
+                    span.style.marginTop = '10px';
                     listItem.appendChild(folderIcon);
                     listItem.appendChild(span);
                     listItem.dataset.folderId = folder.id;
@@ -372,10 +389,12 @@
             const checkboxes = document.querySelectorAll('#photos input[type="checkbox"]:checked');
             const btnSelect = document.getElementById('btn-select');
             const btnLoadFolders = document.getElementById('btn-load-folders');
+            const textMontage = document.querySelector('.text-montage');
             const fileIds = Array.from(checkboxes).map(checkbox => checkbox.value);
 
             overlay.style.display = 'block';
             loader.style.display = 'block';
+            textMontage.style.display = 'block';
 
             const response = await fetch('http://localhost:3000/download', {
                 method: 'POST',
@@ -392,11 +411,18 @@
                 const btnMontage = document.getElementById('btn-montage');
                 btnMontage.style.display = 'none';
                 loader.style.display = 'none';
+                textMontage.style.display = 'none';
                 overlay.style.display = 'none';
                 btnSelect.style.display = 'none';
-                btnLoadFolders.style.display = 'block';
+                
+                const btnTelechargerVideo = document.getElementById('btn-telecharger-video');
+                btnTelechargerVideo.style.display = 'block';
 
-                alert('Montage vidéo créé avec succès');
+                //quand le outpout.mp4 à été téléchargé grace au btn-telecherger-video, on peut supprimer le btn-telecharger-video
+                btnTelechargerVideo.onclick = function() {
+                    btnTelechargerVideo.style.display = 'none';
+                    btnLoadFolders.style.display = 'block';
+                }
             }
         }
         function selectAll() {
