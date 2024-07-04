@@ -63,3 +63,4 @@ RUN npm link
 
 ENTRYPOINT ["/usr/bin/dumb-init", "--", "xvfb-run", "--server-args", "-screen 0 1280x1024x24 -ac"]
 CMD [ "npm", "run", "start" ]
+EXPOSE 3000
