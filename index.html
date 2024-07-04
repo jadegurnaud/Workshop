@@ -385,6 +385,7 @@
                 body: JSON.stringify({ fileIds }),
             });
 
+            console.log(response);
             if (response.ok) {
                 const fileList = document.getElementById('photos');
                 fileList.innerHTML = '';

@@ -143,7 +143,7 @@ app.post('/download', async (req, res) => {
             fs.mkdirSync(downloadDir);
         }
 
-        const downloadedFiles = await Promise.all(fileIds.map(async fileId => {
+        await Promise.all(fileIds.map(async fileId => {
             const file = await drive.files.get({
                 fileId,
                 fields: 'id, name',
@@ -158,9 +158,14 @@ app.post('/download', async (req, res) => {
                 await downloadFile(file.id, filePath);
             }
         }));
-        createVideo();
-
-        res.json({ downloadedFiles });
+        
+        const video = await createVideo();
+        if (video) {
+            console.log('OK');
+            res.json({ message: 'Video created successfully' });
+        } else {
+            res.status(500).json({ error: 'Error creating video' });
+        }
     } catch (err) {
         console.error(err);
         res.status(500).json({ error: err.message });
