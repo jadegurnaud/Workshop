@@ -17,7 +17,7 @@ app.use(bodyParser.json());
 
 // Configure Google OAuth2 authentication
 const auth = new google.auth.GoogleAuth({
-    credentials: process.env.CREDENTIALS,
+    credentials: JSON.parse(process.env.CREDENTIALS),
     scopes: ['https://www.googleapis.com/auth/drive.readonly'],
 });
 
