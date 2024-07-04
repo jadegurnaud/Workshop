@@ -258,7 +258,7 @@
                 <button onclick="deselectAll()">Tout désélectionner</button>
             </div>
             <button id="btn-montage" onclick="downloadFiles()">Créer le montage vidéo</button>
-            <a href="./outputs/output.mp4" download="./outputs/output.mp4">
+            <a href="./outputs/output.mp4" download="output">
                 <button id="btn-telecharger-video">Télécharger la vidéo</button>
             </a>
         </div>
@@ -418,7 +418,6 @@
                 const btnTelechargerVideo = document.getElementById('btn-telecharger-video');
                 btnTelechargerVideo.style.display = 'block';
 
-                //quand le outpout.mp4 à été téléchargé grace au btn-telecherger-video, on peut supprimer le btn-telecharger-video
                 btnTelechargerVideo.onclick = function() {
                     btnTelechargerVideo.style.display = 'none';
                     btnLoadFolders.style.display = 'block';
